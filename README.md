@@ -220,4 +220,95 @@ You may also need to update or add static resources like CSS or JS files.
     - `/:id` - handles deleting project with given id
 
 
+## Heroku Deployment - The Basics
 
+It's time to put your webapp on the web! Heroku is a great Platform-as-a-Service (PaaS) for beginners to deploy their webapps; there is a robust free-tier with no credit card required and an easy-to-use web dashboard. 
+
+First, make a free tier account at `heroku.com`. 
+### Creating a Heroku App
+
+After making an account, open `dashboard.heroku.com` and login.
+
+Click the New button and choose "Create new app".
+
+Enter a name for your application and continue.
+
+You'll be redirected to a new app-specific dashboard on the "Deploy" tab. (You can access your previously created app's dashboards at anytime from the dashboard.heroku.com)
+
+In the Deploy tab, find the Deployment method section. You can either the select "Heroku Git - Use Heroku CLI" or "Github - Connect to Github" options
+
+Appropriate instructions will display below; the following sections here merely clarify those steps.
+
+### Deploying via Heroku CLI
+As instructed, you may need to Install the Heroku CLI first. 
+See the link at the top of the instructions, or go to https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+
+From your command prompt/terminal, login with heroku. The following command will open a browser for you to authenticate with.
+
+```
+heroku login
+```
+
+Your project, if it isn't already, needs to be a git repository. You can skip past the "Create a new Git repository" step if it already is.
+
+The section "Existing Git repository" at the bottom says to run this line:
+
+```
+heroku git:remote -a hackathon-example-dummy-data
+```
+
+This connects your local repo to the heroku repo, which you can push your code to with the steps below it. This CLI command will push your repo up:
+
+```
+git push heroku master
+```
+
+If your branch is called "main" instead of "master", replace it in the above command.
+
+Push again to the heroku remote whenever you have updates.
+
+Notice that the process is simliar to syncing to a remote Github repo, but your Heroku app is NOT synced with your remote Github repo; your local repo is what pushes to both Heroku and the Github, and its possible to update one separately from the other.
+
+### Deploying from Github repo
+
+The Deployment method section has an option to directly sync your Heroku app with a Github repo for added convenience. 
+
+### Build and Deployment
+
+You can see on the Overview or Activity tabs the history of "builds" and "deployments."
+
+Whenever the code is updated, Heroku will "build" the project, which includes installing everything according to the package.json (essentially an `npm install`) 
+
+Then it will "deploy" the web server (essentially an `npm start`), making it run and listen on the standard PORT 80.
+
+If the server goes down, it will attempt to restart at reasonable intervals.
+
+"Open app" button in the upper right will link you to your app's homepage, hosted at the domain `<app-name>.herokuapp.com`
+
+### More settings / tools
+
+There are lot of of advanced settings that Heroku offers for finer control of your application. We will explore some after we add a database, but here are a few to note early on:
+
+#### Server Logs
+
+If you want to view the logs of your web server, you can do so via the heroku CLI:
+https://devcenter.heroku.com/articles/logging#view-logs
+
+#### Restart apps
+If your server needs a "restart", you can click the More button and choose "Restart all dynos."
+
+Note that right now, restarting will cause the dummy data store to be reset.
+
+This is not ideal and will be solved by a proper persistent database layer. 
+#### Access
+You can add other users (say, your team members) as Collaborators in the Access tab, giving them various management roles.
+
+#### Settings -> Maintenance Mode (App off)
+
+If you need to temporarily disable the webapp, you can activate Maintenance Mode in the Settings
+#### Settings -> Domains
+
+Heroku provides every app a free subdomain on the `herokuapp.com` domain, but if you own a custom domain it can be added.
+
+#### Settings -> SSL Certificates
+If you want to use HTTPS instead of HTTP for secure connections, you will need to procure an SSL Certificate for your webapp. This goes beyond the free tier, but may be something you might start thinking about if your app sends or receives sensitive information.
